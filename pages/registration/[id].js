@@ -14,6 +14,8 @@ import { Button } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Modal from '@material-ui/core/Modal';
+import FastForwardIcon from '@material-ui/icons/FastForward';
+import FastRewindIcon from '@material-ui/icons/FastRewind';
 
 import RegistrationCard from './RegistrationCard';
 import CreateViewModal from './createViewModal'
@@ -33,7 +35,10 @@ const useStyles = makeStyles((theme) => ({
 	createButton: {
 		display: `flex`,
 		justifyContent: `flex-end`
-	}
+	},
+  navColor: {
+    color: `#C0C0C0`
+  }
 }));
 
 const _initialData =  [
@@ -243,11 +248,19 @@ export default function Registration({ regiester }) {
 	// Id state is the id of the business
 	const [id, setId] = useState('');
 	const [data, setData] = useState(_initialData);
+  const [page,setPage] = useState(1);
 
 	const [openView, setOpenView] = React.useState(false);
 
-	// employee username + password
+	// Business Infomation
 	const [selectedBusiness, setBusinessInfo] = React.useState('');
+
+  // fetchData
+  function fetch() {
+
+    // after fetch
+    setData(_data)
+  }
 
 	// Handle open close modal
   const handleOpenView = (info) => {
@@ -257,6 +270,24 @@ export default function Registration({ regiester }) {
 	const handleCloseView = () => {
 		setOpenView(false);
 	};
+
+  // Handle Page
+  const handleFirstPage = () => {
+    setPage(1)
+    fetch
+  }
+  const handlePreviousPage = () => {
+    setPage(page-1)
+    fetch()
+  }
+  const handleNextPage = () => {
+    setPage(page+1)
+    fetch()
+  }
+  const handleLastPage = () => {
+    setPage(10)
+    fetch()
+  }
 
 	// Set if request form should be visible
 	const [requestForm, setRequestForm] = useState(false);
@@ -293,36 +324,22 @@ export default function Registration({ regiester }) {
 					onClose={handleCloseView}
 					aria-labelledby="simple-modal-title"
 					aria-describedby="simple-modal-description"
-				>
-					<CreateViewModal
-						className={classes.modal}
-            business={selectedBusiness}
-						onClickClose={() => {
-							handleCloseView();
-						}}
-					/>
-				</Modal>
+			>
+				<CreateViewModal
+					className={classes.modal}
+          business={selectedBusiness}
+					onClickClose={() => {
+						handleCloseView();
+					}}
+				/>
+			</Modal>
+      <Box display="flex" justifyContent="flex-end" >
+        { (page-2) <= 0 ? "" : <Button className={classes.navColor} onClick={handleFirstPage}><FastRewindIcon /></Button>}
+        { (page-1) <= 0 ? <div></div>:<Button className={classes.navColor} onClick={handlePreviousPage}>{page -1}</Button>}
+        <Button><b>Page {page}</b></Button>
+        { page > 9 ? "" : <Button className={classes.navColor} onClick={handleNextPage}>{page+1}</Button>}
+        { page > 8 ? "" : <Button className={classes.navColor} onClick={handleLastPage}><FastForwardIcon /></Button>}
+      </Box>
 		</Layout>
 	);
 }
-
-// export async function getServerSideProps(ctx) {
-// 	// Get params
-// 	let env = process.env.NEXT_PUBLIC_ENV;
-// 	let id = ctx.params.id;
-// 	let employees = [];
-
-// 	// Get initial data
-// 	let empRepo = getEmployeeRepo({ env, id, url: process.env.NEXT_PUBLIC_BE });
-// 	try {
-// 		employees = await empRepo.getEmployee();
-// 	} catch (e) {
-// 		// TODO handle error
-// 	}
-
-// 	return {
-// 		props: {
-// 			employees: employees
-// 		}
-// 	};
-// }
