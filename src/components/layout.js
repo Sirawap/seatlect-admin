@@ -92,7 +92,7 @@ export default function Layout({ children, id }) {
 			<AppBar position="fixed" className={classes.appBar}>
 				<Toolbar>
 					<Typography variant="h6" noWrap>
-						SEATLECT for ADMIN
+						SEATLECT for Admin
 					</Typography>
 				</Toolbar>
 			</AppBar>

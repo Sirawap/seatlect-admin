@@ -12,13 +12,13 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import DescriptionIcon from '@material-ui/icons/Description';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 // import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
 import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -108,6 +108,7 @@ export default function RegistrationCard({
 	BusinessInfo,
 	}) {
 	const classes = useStyles();
+  const [isShown, setIsShown] = useState(false);
 
 	// Setup repo
 	const repo = getEmployeeRepo({
@@ -133,7 +134,7 @@ export default function RegistrationCard({
 
 	return (
 		<Card className={classes.root}>
-			<Grid container className={classes.root} spacing={2}>
+			<Grid container className={classes.root} spacing={1}>
 				{/* --- username section --- */}
 				<Grid item xs={6}>
 					<p>Business id : {id}</p>
@@ -142,13 +143,13 @@ export default function RegistrationCard({
 
 				<Grid item xs={6} className={classes.displayEnd}>
 					{/* --- edit button section --- */}
-          <Tooltip title="View Detail">
-            <Button size="small" disableElevation onClick={() => openView()}>
-              <DescriptionIcon color="primary" />
-            </Button>
+					<Tooltip title="Compare Detail">
+            <Button size="small" disableElevation onClick={() => openView()} onMouseEnter={() => setIsShown(true)}>
+						  <ImportContactsIcon color="primary" />
+					  </Button>
           </Tooltip>
 					{/* --------------------------------------- */}
-					{/* --- Approve button section --- */}
+					{/* --- delete button section --- */}
 					<Button size="small" variant="contained" className={classes.approveButton} disableElevation onClick={deleteItem}>
 						Approve
 					</Button>
