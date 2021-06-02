@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { getEmployeeRepo } from 'src/employeeRepo';
+import { getRequestRepo } from 'src/requestRepo';
+import { getBusinessRepo } from 'src/businessRepo';
 import Layout from 'src/components/layout';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -213,20 +214,30 @@ const _theBusiness = {
     "address": "21/8 Airport King R. Bangkok 15460"
 }
 
-export default function Registration({ regiester }) {
+export default function Request({ requests }) {
 	// Initial setup
 	const classes = useStyles();
 
 	// Id state is the id of the business
 	const [id, setId] = useState('');
-	const [data, setData] = useState(_initialData);
-    const [page,setPage] = useState(1);
+	// const [data, setData] = useState(_initialData);
+  const [data, setData] = useState(requests);
+  const [page,setPage] = useState(1);
 
 	const [openView, setOpenView] = React.useState(false);
 
 	// Business Infomation
 	const [selectedBusiness, setBusinessInfo] = React.useState('');
-    const [oldBusiness, setOldBusinessInfo] = React.useState(_theBusiness)
+  const [oldBusiness, setOldBusinessInfo] = React.useState(_theBusiness)
+
+  	// Setup repo
+	const reqRepo = getRequestRepo({
+		url: 'http://35.185.180.140:9999/api/v1'
+	}); 
+
+  const busRepo = getBusinessRepo({
+		url: 'http://35.185.180.140:9999/api/v1'
+	});
 
   // fetchData
   function fetch() {
@@ -236,12 +247,19 @@ export default function Registration({ regiester }) {
   }
 
 	// Handle open close modal
-  const handleOpenView = (info) => {
-		setOpenView(true);
+  async function handleOpenView(info){
+    // id of the selected business
+    let id = info._id
 		setBusinessInfo(info);
-    // fetch(selectedBusiness._id)
-    setOldBusinessInfo(_theBusiness)
+
+    // fetch old business info
+    let response = await busRepo.getCertainBusiness(id);
+    console.log(response)
+    setOldBusinessInfo(response)
+    
+    setOpenView(true); 
 	};
+
 	const handleCloseView = () => {
 		setOpenView(false);
 	};
@@ -318,4 +336,33 @@ export default function Registration({ regiester }) {
       </Box>
 		</Layout>
 	);
+}
+
+
+export async function getServerSideProps() {
+	// Get params
+	let _url = 'http://35.185.180.140:9999/api/v1'
+	// let id = ctx.params.id;
+  let _initialPage = 1;
+	let requests = [];
+  let response = {}
+	// Get initial data
+	let reqRepo = getRequestRepo({ url: _url});
+  try {
+		response = await reqRepo.getRequest(_initialPage);
+    requests = response.request
+    // console.log(`Response______________________________________________`)
+    // console.log(response)
+    // console.log(`Requst______________________________________________`)
+    // console.log(requests)
+    // console.log(`Main______________________________________________`)
+	} catch (e) {
+		// TODO handle error
+	}
+
+	return {
+		props: {
+			requests
+		}
+	};
 }

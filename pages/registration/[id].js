@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { getEmployeeRepo } from 'src/employeeRepo';
+import { getBusinessRepo} from 'src/businessRepo';
 import Layout from 'src/components/layout';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -241,19 +241,24 @@ const _initialData =  [
   },
 ]
 
-export default function Registration({ regiester }) {
+export default function Registration({ registers }) {
 	// Initial setup
 	const classes = useStyles();
 
 	// Id state is the id of the business
 	const [id, setId] = useState('');
-	const [data, setData] = useState(_initialData);
+	const [data, setData] = useState(registers);
   const [page,setPage] = useState(1);
 
 	const [openView, setOpenView] = React.useState(false);
 
 	// Business Infomation
 	const [selectedBusiness, setBusinessInfo] = React.useState('');
+
+  	// Setup repo
+	const repo = getBuisnessRepo({
+		url: 'http://35.185.180.140:9999/api/v1'
+	}); 
 
   // fetchData
   function fetch() {
@@ -342,4 +347,33 @@ export default function Registration({ regiester }) {
       </Box>
 		</Layout>
 	);
+}
+
+export async function getServerSideProps() {
+	// Get params
+	let _url = 'http://35.185.180.140:9999/api/v1'
+	// let id = ctx.params.id;
+  let _initialPage = 1;
+  let _status = 0;
+	let registers = [];
+  let response = {}
+	// Get initial data
+	let businessRepo = getBusinessRepo({ url: _url});
+  try {
+		response = await businessRepo.getBusiness(_initialPage,_status);
+    registers = response.businesses
+    // console.log(`Response______________________________________________`)
+    // console.log(response)
+    // console.log(`Register______________________________________________`)
+    // console.log(registers)
+    // console.log(`Main______________________________________________`)
+	} catch (e) {
+		// TODO handle error
+	}
+
+	return {
+		props: {
+			registers
+		}
+	};
 }

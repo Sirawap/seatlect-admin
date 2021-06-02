@@ -1,15 +1,25 @@
 import axios from 'axios';
 
 class BusinessRepo {
-	constructor({ url, endpoint = '/business', id }) {
+	constructor({ url, endpoint = '/business' }) {
 		// Must pass in url and id
 		this.url = url;
-		this.endpoint = `${endpoint}/${id}`;
+		this.endpoint = `${endpoint}`;
 	}
 
-	async getBusiness() {
+	async getCertainBusiness(id) {
 		try {
-			const response = await axios.get(this.url + this.endpoint);
+			const response = await axios.get(this.url + this.endpoint +`/`+id);
+			return response.data;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
+
+	async getBusiness(page,status) {
+		try {
+			const response = await axios.get(this.url + this.endpoint+`?page=`+page+`&status=`+status);
 			return response.data;
 		} catch (e) {
 			// TODO add better error handling
@@ -94,12 +104,8 @@ class BusinessMockRepo {
 	}
 }
 
-function getBusinessRepo({ url, env, id }) {
-	if (env === 'development') {
-		return new BusinessMockRepo();
-	}
-
-	return new BusinessRepo({ url, id });
+function getBusinessRepo({ url }) {
+	return new BusinessRepo({ url });
 }
 
 export { BusinessRepo, BusinessMockRepo, getBusinessRepo };

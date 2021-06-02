@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 class RequestRepo {
-	constructor({ url, endpoint = '/request', id }) {
+	constructor({ url, endpoint = '/request'}) {
 		// Must pass in url and id
 		this.url = url;
-		this.endpoint = `${endpoint}/${id}`;
+		this.endpoint = `${endpoint}`;
+		console.log(endpoint)
 	}
 
 	async createRequest(args) {
@@ -12,7 +13,19 @@ class RequestRepo {
 		// TODO: Check arguments
 
 		try {
-			const response = await axios.post(this.url + this.endpoint, args);
+			const response = await axios.post(this.url + this.endpoint);
+			return response.data;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
+
+	async getRequest(args) {
+		try {
+			const response = await axios.get(this.url + this.endpoint+`?page=`+args);
+			// console.log(response)
+			// console.log(this.url + this.endpoint+`?page=`+args)
 			return response.data;
 		} catch (e) {
 			// TODO add better error handling
@@ -30,12 +43,8 @@ class RequestMockRepo {
 	}
 }
 
-function getRequestRepo({ url, env, id }) {
-	if (env === 'development') {
-		return new RequestMockRepo();
-	}
-
-	return new RequestRepo({ url, id });
+function getRequestRepo({ url}) {
+	return new RequestRepo({ url});
 }
 
 export { RequestRepo, RequestMockRepo, getRequestRepo };
