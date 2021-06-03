@@ -254,7 +254,7 @@ export default function Request({ requests }) {
 
     // fetch old business info
     let response = await busRepo.getCertainBusiness(id);
-    console.log(response)
+    // console.log(response)
     setOldBusinessInfo(response)
     
     setOpenView(true); 
@@ -301,13 +301,16 @@ export default function Request({ requests }) {
 		<Layout id={id}>
 			<h2>Request changing of business information</h2>
       {/* --- Body section : Registration card --- */}
-			{data.map((register, i) => {
+			{data.map((request, i) => {
 				return (
-					<Grid item xs={12} key={register._id}>
+					<Grid item xs={12} key={request._id}>
 						<RegistrationCard
-							key={register._id}
-							id={register._id}
-							openView={() => handleOpenView(register)}
+							key={request._id}
+							id={request._id}
+							openView={() => handleOpenView(request)}
+              requests={data}
+              setRequest={setData}
+              index={i}
 						></RegistrationCard>
 					</Grid>
 				);

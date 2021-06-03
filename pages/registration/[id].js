@@ -256,21 +256,14 @@ export default function Registration({ registers }) {
 	const [selectedBusiness, setBusinessInfo] = React.useState('');
 
   	// Setup repo
-	const repo = getBuisnessRepo({
-		url: 'http://35.185.180.140:9999/api/v1'
-	}); 
-
-  // fetchData
-  function fetch() {
-
-    // after fetch
-    setData(_data)
-  }
+	const busRepo = getBusinessRepo({
+    url: 'http://35.185.180.140:9999/api/v1'
+  });
 
 	// Handle open close modal
   const handleOpenView = (info) => {
-		setOpenView(true);
 		setBusinessInfo(info);
+    setOpenView(true);
 	};
 	const handleCloseView = () => {
 		setOpenView(false);
@@ -320,6 +313,9 @@ export default function Registration({ registers }) {
 							key={register._id}
 							id={register._id}
 							openView={() => handleOpenView(register)}
+              registers={data}
+              setBusiness={setData}
+              index={i}
 						></RegistrationCard>
 					</Grid>
 				);

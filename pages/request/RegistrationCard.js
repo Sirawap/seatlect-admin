@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { getEmployeeRepo } from 'src/employeeRepo';
+import { getRequestRepo } from 'src/requestRepo';
 import Layout from 'src/components/layout';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -104,32 +104,50 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RegistrationCard({
 	id,
+  index,
 	openView,
 	BusinessInfo,
+  setRequest,
+  requests,
 	}) {
 	const classes = useStyles();
   const [isShown, setIsShown] = useState(false);
 
 	// Setup repo
-	const repo = getEmployeeRepo({
-		env: process.env.NEXT_PUBLIC_ENV,
-		url: process.env.NEXT_PUBLIC_BE,
-		id: id
+	const repo = getRequestRepo({
+		url: 'http://35.185.180.140:9999/api/v1'
 	});
 
-	async function deleteItem(e) {
+	async function approveItem(e) {
 		e.preventDefault();
+		try {
+			let response = await repo.setApprove( id );
+      // consoe.log(response)
+			if(response.status == 204){
+        let tmp = [...requests];
+        tmp.splice(index, 1);
+        console.log(tmp)
+        setRequest(tmp);
+      }
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
-		// try {
-		// 	await repo.deleteEmployee({ username });
-
-		// 	let tmp = [...employees];
-		// 	tmp.splice(index, 1);
-
-		// 	setEmployee(tmp);
-		// } catch (e) {
-		// 	console.log(e);
-		// }
+  async function rejectItem(e) {
+		e.preventDefault();
+		try {
+			let response = await repo.setReject( id );
+      // console.log(response)
+			if(response.status == 204){
+        let tmp = [...requests];
+        tmp.splice(index, 1);
+        console.log(tmp)
+        setRequest(tmp);
+      }
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	return (
@@ -145,16 +163,16 @@ export default function RegistrationCard({
 					{/* --- edit button section --- */}
 					<Tooltip title="Compare Detail">
             <Button size="small" disableElevation onClick={() => openView()} onMouseEnter={() => setIsShown(true)}>
-						  <ImportContactsIcon color="primary" />
+				      <ImportContactsIcon color="primary" />
 					  </Button>
           </Tooltip>
 					{/* --------------------------------------- */}
 					{/* --- delete button section --- */}
-					<Button size="small" variant="contained" className={classes.approveButton} disableElevation onClick={deleteItem}>
+					<Button size="small" variant="contained" className={classes.approveButton} disableElevation onClick={approveItem}>
 						Approve
 					</Button>
           {/* --- delete button section --- */}
-					<Button size="small" variant="contained" className={classes.rejectButton} disableElevation onClick={deleteItem}>
+					<Button size="small" variant="contained" className={classes.rejectButton} disableElevation onClick={rejectItem}>
 						Reject
 					</Button>
 				</Grid>

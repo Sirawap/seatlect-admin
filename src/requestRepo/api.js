@@ -32,6 +32,30 @@ class RequestRepo {
 			throw 'Network error';
 		}
 	}
+
+	async setApprove(businessId) {
+		try {
+			const response = await axios.post(this.url + this.endpoint+`/`+businessId+`/approve`);
+			// console.log(response)
+			// console.log(this.url + this.endpoint+`?page=`+args)
+			return response;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
+
+  async setReject(businessId) {
+		try { 
+			const response = await axios.delete(this.url + this.endpoint+`/`+businessId);
+			// console.log(this.url + this.endpoint+`/`+businessId)
+      // console.log(response)
+			return response;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
 }
 
 class RequestMockRepo {

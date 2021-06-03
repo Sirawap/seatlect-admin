@@ -38,6 +38,43 @@ class BusinessRepo {
 		}
 	}
 
+	async setApprove(businessId) {
+		try {
+      // http://{{addr}}/api/v1/business/60b759a06b4ced4a5e1fa652/status
+			const response = await axios.patch(this.url + this.endpoint+`/`+businessId+`/status`,{ status : 1});
+			// console.log(response)
+			// console.log(this.url + this.endpoint+`?page=`+args)
+			return response;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
+
+	async setReject(businessId) {
+		try { 
+			const response = await axios.patch(this.url + this.endpoint+`/`+businessId+`/status`,{ status: -1 });
+			// console.log(this.url + this.endpoint+`/`+businessId)
+      // console.log(response)
+			return response;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
+
+	async setPending(businessId) {
+		try { 
+			const response = await axios.patch(this.url + this.endpoint+`/`+businessId+`/status`,{ status: -1 });
+			// console.log(this.url + this.endpoint+`/`+businessId)
+      // console.log(response)
+			return response;
+		} catch (e) {
+			// TODO add better error handling
+			throw 'Network error';
+		}
+	}
+
 	async appendImage(args) {
 		try {
 			const res = await axios.post(this.url + this.endpoint + '/images', args);
