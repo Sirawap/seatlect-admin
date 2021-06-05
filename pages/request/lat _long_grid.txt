@@ -1,0 +1,49 @@
+// ---------  latitude + longitude for old business info  ----------
+          <Grid item xs={6}>
+            <InputLabel className={classes.label}>Latitude</InputLabel>
+            {/* --- business name time --- */}
+            <TextField
+              variant="outlined"
+              fullWidth
+              disabled
+              value={old.location.latitude}
+              className={classes.textField}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <InputLabel className={classes.label}>Longitude</InputLabel>
+            {/* --- business name time --- */}
+            <TextField
+              variant="outlined"
+              fullWidth
+              disabled
+              value={old.location.longitude}
+              className={classes.textField}
+            />
+          </Grid>     
+
+
+
+// ---------  latitude + longitude for old business info  ----------
+          <Grid item xs={6}>
+            <InputLabel className={classes.label}>Latitude</InputLabel>
+            {/* --- business name time --- */}
+            <TextField
+              variant="outlined"
+              fullWidth
+              disabled
+              value={business.location.latitude}
+              className={classes.textField}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <InputLabel className={classes.label}>Longitude</InputLabel>
+            {/* --- business name time --- */}
+            <TextField
+              variant="outlined"
+              fullWidth
+              disabled
+              value={business.location.longitude}
+              className={classes.textField}
+            />
+          </Grid>

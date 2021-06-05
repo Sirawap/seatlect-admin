@@ -11,7 +11,8 @@ import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-
+import GoogleMapReact from 'google-map-react';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 
 // pre-define number
@@ -42,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: `white`,
 		border: '2px solid #000',
 		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 4, 3)
+		padding: theme.spacing(2, 4, 3),
+    maxHeight: `calc(100vh - 210px)`,
+    overflowY: `auto`
 	},
 	heroImage: {
 		width: 62.6953125,
@@ -146,6 +149,11 @@ const useStyles = makeStyles((theme) => ({
   marginTop:{
     marginTop: `0rem`,
   },
+  mapContainer: {
+		width: `100%`,
+		height: `250px`,
+		margin: `0 0 1.2rem 0`
+	},
 }));
 
 export default function CreateViewModal({ old, business, onClickClose }) {
@@ -244,28 +252,23 @@ export default function CreateViewModal({ old, business, onClickClose }) {
               className={classes.textField}
             />
           </Grid>
-          <Grid item xs={6}>
-            <InputLabel className={classes.label}>Latitude</InputLabel>
-            {/* --- business name time --- */}
-            <TextField
-              variant="outlined"
-              fullWidth
-              disabled
-              value={old.location.latitude}
-              className={classes.textField}
-            />
+          <Grid item xs ={12} className={classes.mapContainer}>
+            <GoogleMapReact
+              defaultCenter={{
+                lat: old.location.latitude,
+                lng: old.location.longitude
+              }}
+              defaultZoom={17}
+              // onClick={handleMarker}
+            >
+              <LocationOnIcon
+                lat={old.location.latitude}
+                lng={old.location.longitude}
+                color="error"
+              />
+            </GoogleMapReact>
           </Grid>
-          <Grid item xs={6}>
-            <InputLabel className={classes.label}>Longitude</InputLabel>
-            {/* --- business name time --- */}
-            <TextField
-              variant="outlined"
-              fullWidth
-              disabled
-              value={old.location.longitude}
-              className={classes.textField}
-            />
-          </Grid>
+          {/* --- old business info (Deleted) --- */}
         </Grid>
         <Grid item xs= {6}>
           <Grid item xs={12}><h2 className={classes.marginTop}>New infomation</h2></Grid>
@@ -313,28 +316,24 @@ export default function CreateViewModal({ old, business, onClickClose }) {
               className={classes.textField}
             />
           </Grid>
-          <Grid item xs={6}>
-            <InputLabel className={classes.label}>Latitude</InputLabel>
-            {/* --- business name time --- */}
-            <TextField
-              variant="outlined"
-              fullWidth
-              disabled
-              value={business.location.latitude}
-              className={classes.textField}
-            />
+          <Grid item xs ={12} className={classes.mapContainer}>
+            <GoogleMapReact
+              defaultCenter={{
+                lat: business.location.latitude,
+                lng: business.location.longitude
+              }}
+              defaultZoom={17}
+              // onClick={handleMarker}
+            >
+              <LocationOnIcon
+                lat={business.location.latitude}
+                lng={business.location.longitude}
+                color="error"
+              />
+            </GoogleMapReact>
           </Grid>
-          <Grid item xs={6}>
-            <InputLabel className={classes.label}>Longitude</InputLabel>
-            {/* --- business name time --- */}
-            <TextField
-              variant="outlined"
-              fullWidth
-              disabled
-              value={business.location.longitude}
-              className={classes.textField}
-            />
-          </Grid>
+          {/* --- new business info (Deleted) --- */}
+          
         </Grid>
       </Grid>
     </Card>
